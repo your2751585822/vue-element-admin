@@ -9,7 +9,7 @@
 
       <el-table-column width="180px" align="center" label="orderNo">
         <template slot-scope="{row}">
-          <span>{{ row.orderNo }}</span>
+          <span>{{ row.orderNo +'123456' }}</span>
         </template>
       </el-table-column>
 
