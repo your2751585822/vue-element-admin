@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/"
-          target: "/var/www/vue-admin/"
+          target: "/var/www/vue-admin/dist/"
           strip_components: 1
       # 步骤5：重启 Nginx（可选，确保新文件生效）
       - name: Restart Nginx
