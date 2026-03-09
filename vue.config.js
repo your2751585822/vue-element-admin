@@ -36,7 +36,48 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    // before: require('./mock/mock-server.js'), // 禁用 mock，改为调用真实接口
+    proxy: {
+      // '/dev-api': {
+      //   target: 'http://localhost:9527', // 指向自己，继续使用 mock
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/dev-api': ''
+      //   }
+      // },
+      '/dev-api/auth': {
+        target: 'http://118.31.76.194:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev-api': '' // 去掉 /dev-api 前缀
+        },
+        logLevel: 'debug'
+      },
+      '/dev-api/user': {
+        target: 'http://118.31.76.194:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev-api': '' // 去掉 /dev-api 前缀
+        },
+        logLevel: 'debug'
+      },
+      '/dev-api/vue-element-admin': {
+        target: 'http://118.31.76.194:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev-api': '' // 去掉 /dev-api 前缀
+        },
+        logLevel: 'debug'
+      },
+      '/dev-api/orders': {
+        target: 'http://118.31.76.194:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev-api': '' // 去掉 /dev-api 前缀
+        },
+        logLevel: 'debug'
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -36,6 +36,10 @@ const actions = {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
+        commit('SET_NAME', data.username)
+        commit('SET_AVATAR', '') // 后端未 返回头像，使用空字符串
+        commit('SET_INTRODUCTION', data.email || '') // 用邮箱作为简介
+        commit('SET_ROLES', ['admin']) // 默认设置角色为 admin
         setToken(data.token)
         resolve()
       }).catch(error => {
@@ -46,29 +50,22 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { roles, name, avatar, introduction } = data
-
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+    return new Promise((resolve) => {
+      // 后端登录接口已返回用户信息，直接使用 store 中已存储的数据
+      const data = {
+        roles: state.roles || ['admin'],
+        name: state.name || '',
+        avatar: state.avatar || '',
+        introduction: state.introduction || ''
+      }
+      if (!data.roles || data.roles.length <= 0) {
+        data.roles = ['admin'] // 默认角色
+      }
+      commit('SET_ROLES', data.roles)
+      commit('SET_NAME', data.name)
+      commit('SET_AVATAR', data.avatar)
+      commit('SET_INTRODUCTION', data.introduction)
+      resolve(data)
     })
   },
 

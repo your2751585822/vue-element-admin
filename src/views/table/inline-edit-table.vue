@@ -7,70 +7,57 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="Date">
+      <el-table-column width="180px" align="center" label="orderNo">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.orderNo }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="Author">
+      <el-table-column width="120px" align="center" label="totalAmount">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.totalAmount }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="Importance">
+      <el-table-column width="120px" align="center" label="userId">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Status" width="110">
+      <el-table-column width="120px" align="center" label="status">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
+          <span>{{ row.status }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="Title">
+      <el-table-column width="120px" align="center" label="createTime">
         <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input" size="small" />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >
-              cancel
-            </el-button>
-          </template>
-          <span v-else>{{ row.title }}</span>
+          <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="120">
+      <el-table-column width="120px" align="center" label="updateTime">
         <template slot-scope="{row}">
-          <el-button
-            v-if="row.edit"
-            type="success"
-            size="small"
-            icon="el-icon-circle-check-outline"
-            @click="confirmEdit(row)"
-          >
-            Ok
-          </el-button>
-          <el-button
-            v-else
-            type="primary"
-            size="small"
-            icon="el-icon-edit"
-            @click="row.edit=!row.edit"
-          >
-            Edit
-          </el-button>
+          <span>{{ row.updateTime }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="120px" align="center" label="deleted">
+        <template slot-scope="{row}">
+          <span>{{ row.deleted }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="120px" align="center" label="user">
+        <template slot-scope="{row}">
+          <span>{{ row.user }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="120px" align="center" label="statusDesc">
+        <template slot-scope="{row}">
+          <span>{{ row.statusDesc }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -108,14 +95,17 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const { data } = await fetchList(this.listQuery)
-      const items = data.items
-      this.list = items.map(v => {
-        this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
-        v.originalTitle = v.title //  will be used when user click the cancel botton
-        return v
-      })
+      const res = await fetchList()
+      console.log('data', res)
+      this.list = res.data // 从 res.data 获取数组
       this.listLoading = false
+      // const items = data.items
+      // this.list = items.map(v => {
+      //   this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
+      //   v.originalTitle = v.title //  will be used when user click the cancel botton
+      //   return v
+      // })
+      // this.listLoading = false
     },
     cancelEdit(row) {
       row.title = row.originalTitle

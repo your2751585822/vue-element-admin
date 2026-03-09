@@ -8,24 +8,20 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       # 步骤1：拉取代码
       - name: Checkout code
         uses: actions/checkout@v3
-
       # 步骤2：设置 Node.js 环境
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
       # 步骤3：安装依赖并打包
       - name: Install dependencies and build
         run: |
           npm install
           npm run build:prod
-
       # 步骤4：通过 SCP 上传 dist 文件到服务器
       - name: Deploy to server via SCP
         uses: appleboy/scp-action@v0.1.4
@@ -36,7 +32,6 @@ jobs:
           source: "dist/"
           target: "/var/www/vue-admin/"
           strip_components: 1
-
       # 步骤5：重启 Nginx（可选，确保新文件生效）
       - name: Restart Nginx
         uses: appleboy/ssh-action@v1.0.0
