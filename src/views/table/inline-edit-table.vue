@@ -15,7 +15,7 @@
 
       <el-table-column width="120px" align="center" label="totalAmount">
         <template slot-scope="{row}">
-          <span>{{ row.totalAmount }}</span>
+          <span>{{ row.totalAmount +'1234567' }}</span>
         </template>
       </el-table-column>
 
