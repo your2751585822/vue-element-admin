@@ -1,9 +1,13 @@
 # Dockerfile
 FROM node:18-alpine AS builder
 WORKDIR /app
+
+# 先安装 git（Alpine Linux 用 apk 包管理器）
+RUN apk add --no-cache git
+
 RUN npm config set registry https://registry.npmmirror.com
 COPY package*.json ./
-RUN npm install     # 这里从 npm ci 改成 npm install
+RUN npm install
 COPY . .
 RUN npm run build:prod
 
